@@ -10,19 +10,19 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    struct EmojiChars
+    struct EmojiChar
     {
         var emoji: String?
         var count: Int
+        var cardNumber: Int
     }
     
     var emojiCharacters =   [
-                                EmojiChars(emoji: "🐮", count: 0),
-                                EmojiChars(emoji: "🐶", count: 0),
+                                EmojiChar(emoji: "🐮", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "🐶", count: 0, cardNumber: 0),
                             ]
     
-    
-    var numberOfButtons = 4
+    var cardsWithEmoji = [EmojiChar]()
     
     @IBOutlet weak var card1: UIButton!
     @IBOutlet weak var card2: UIButton!
@@ -38,62 +38,46 @@ class ViewController: UIViewController {
         cards.append(card3);
         cards.append(card4);
         
-//        var arr = [1,2,3,4]
-//        print(arr[0])
-//        arr.remove(at: 0)
-//        print(arr.count)
-        
+        var charNumberHolder = 1
         for card in cards {
             if (card.currentTitle == nil) {
                 let emojiCharactersIndex = Int(arc4random_uniform(UInt32(emojiCharacters.count)));
 
-                let emoji = emojiCharacters[emojiCharactersIndex].emoji!
-                card.setTitle(emoji, for: UIControlState.normal)
+                let emojiString = emojiCharacters[emojiCharactersIndex].emoji!
+                card.setTitle(emojiString, for: UIControlState.normal)
                 emojiCharacters[emojiCharactersIndex].count += 1
-
-                print(emojiCharacters[emojiCharactersIndex])
+                
+                let cardWithEmoji = EmojiChar(emoji: emojiString, count: 0, cardNumber: charNumberHolder)
+                print(cardWithEmoji)
+                charNumberHolder += 1
+                
+                cardsWithEmoji.append(cardWithEmoji)
                 
                 if (emojiCharacters[emojiCharactersIndex].count > 1)
                 {
-                    print("Removed: \(emojiCharacters[emojiCharactersIndex].emoji!) from Array")
                     emojiCharacters.remove(at: emojiCharactersIndex)
                 }
             }
         }
     }
-
-    var emojiHolder: String = ""
-    var numberOfCardTouched: Int = 0
     
     @IBAction func touchCard(_ sender: UIButton) {
-        flipCard(withEmoji: "🐶", on: sender)
+        flip(on: sender);
     }
     
-    @IBAction func touchSecondCard(_ sender: UIButton) {
-        flipCard(withEmoji: "🐮", on: sender)
-    }
-    
-    @IBAction func resetCard(_ sender: UIButton) {
-    }
-    
-    
-    func flipCard(withEmoji emoji: String, on button: UIButton)
+    func flip(on button: UIButton)
     {
-        numberOfCardTouched += 1
-        if (numberOfCardTouched > 2)
-        {
-            numberOfCardTouched = 1
-        }
-        print(numberOfCardTouched)
+        let index = button.tag;
+        let cardTitle = cardsWithEmoji[index-1].emoji
         
-        if (button.currentTitle == emoji)
-        {
+        if (button.currentTitle == "") {
+            button.setTitle(cardTitle, for: UIControlState.normal)
+            button.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        }
+            
+        else {
             button.setTitle("", for: UIControlState.normal)
             button.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-        }
-        else {
-            button.setTitle(emoji, for: UIControlState.normal)
-            button.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         }
         
     }
