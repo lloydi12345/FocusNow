@@ -32,17 +32,49 @@ class ViewController: UIViewController {
     var cards: [UIButton] = [UIButton]()
     
     var myButtons = [UIButton]()
-    let numberOfButtons = 4
+    let numberOfButtons = 8
+    
+    struct CardPositioning
+    {
+        var xPos: Int
+        var yPos: Int
+        var width: Int
+        var height: Int
+        var xIncrementer: Int
+        var yIncrementer: Int
+    }
+    
+    var cardPositioningSet = [
+        CardPositioning(xPos: 90, yPos: 90, width: 80, height: 80, xIncrementer: 120, yIncrementer: 120),
+        CardPositioning(xPos: 60, yPos: 90, width: 80, height: 80, xIncrementer: 90, yIncrementer: 90),
+        ]
+    
+    var xPosArrayForTwoRows = [90, 210]
     
     @IBAction func deleteButtons(_ sender: UIButton) {
         myButtons.removeAll()
     }
     
     @IBAction func createButtons(_ sender: UIButton) {
-        for index in 0...4 {
-            print(index)
-            let myButton = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        
+        var xPos = 0
+        var yPos = 90
+        var xIndexer = 0
+        
+        for index in 1 ... 10 {
+            
+            if (xIndexer > 1) {
+                xIndexer = 0
+                yPos = yPos + 120
+            }
+            
+            xPos = xPosArrayForTwoRows[xIndexer]
+            xIndexer += 1
+            
+            let myButton = UIButton(frame: CGRect(x: xPos, y: yPos, width: 80, height: 80))
+            
             myButton.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            myButton.setTitle(String(index), for: UIControlState.normal)
             self.view.addSubview(myButton)
             myButtons.append(myButton)
         }
