@@ -20,8 +20,12 @@ class ViewController: UIViewController {
     var emojiCharacters =   [
                                 EmojiChar(emoji: "🐮", count: 0, cardNumber: 0),
                                 EmojiChar(emoji: "🐶", count: 0, cardNumber: 0),
-//                                EmojiChar(emoji: "🦊", count: 0, cardNumber: 0),
-//                                EmojiChar(emoji: "🐸", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "🦊", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "🐸", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "A", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "B", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "C", count: 0, cardNumber: 0),
+                                EmojiChar(emoji: "D", count: 0, cardNumber: 0),
                             ]
     
     var cardsWithEmoji = [EmojiChar]()
@@ -32,7 +36,7 @@ class ViewController: UIViewController {
     var cards: [UIButton] = [UIButton]()
     
     var myButtons = [UIButton]()
-    let numberOfButtons = 8
+    let numberOfCards = 6
     
     struct CardPositioning
     {
@@ -55,13 +59,29 @@ class ViewController: UIViewController {
         myButtons.removeAll()
     }
     
-    @IBAction func createButtons(_ sender: UIButton) {
+    func pickRandomElements(in arr: [EmojiChar], by elementNum: Int) -> [EmojiChar]
+    {
+        var characters = [EmojiChar]()
+        var arrayHolder = arr
+        
+        for _ in 1 ... elementNum
+        {
+            let randomIndex = arc4random_uniform(UInt32(arrayHolder.count))
+            let emoji = arrayHolder.remove(at: Int(randomIndex))
+            characters.append(emoji)
+        }
+        return characters
+    }
+    
+    @IBAction func createButtons(_ sender: UIButton)
+    {
+        let emojiArray = pickRandomElements(in: emojiCharacters, by: numberOfCards)
         
         var xPos = 0
         var yPos = 90
         var xIndexer = 0
         
-        for index in 1 ... 10 {
+        for index in 1 ... numberOfCards {
             
             if (xIndexer > 1) {
                 xIndexer = 0
