@@ -10,78 +10,99 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    struct EmojiChar
-    {
-        var emoji: String?
-        var count: Int
-        var cardNumber: Int
-    }
+    var emojiStrings = ["🐮","🐶","🦊","🐸","A","B","C","D"]
     
-    var emojiCharacters =   [
-                                EmojiChar(emoji: "🐮", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "🐶", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "🦊", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "🐸", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "A", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "B", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "C", count: 0, cardNumber: 0),
-                                EmojiChar(emoji: "D", count: 0, cardNumber: 0),
-                            ]
-    
-    var cardsWithEmoji = [EmojiChar]()
+    var cardsWithEmoji = [String]()
 
     @IBOutlet weak var card1: UIButton!
     @IBOutlet weak var card2: UIButton!
     
     var cards: [UIButton] = [UIButton]()
+    var myCards = [UIButton]()
     
-    var myButtons = [UIButton]()
-    let numberOfCards = 6
-    
-    struct CardPositioning
-    {
-        var xPos: Int
-        var yPos: Int
-        var width: Int
-        var height: Int
-        var xIncrementer: Int
-        var yIncrementer: Int
-    }
-    
-    var cardPositioningSet = [
-        CardPositioning(xPos: 90, yPos: 90, width: 80, height: 80, xIncrementer: 120, yIncrementer: 120),
-        CardPositioning(xPos: 60, yPos: 90, width: 80, height: 80, xIncrementer: 90, yIncrementer: 90),
-        ]
+    var numberOfCards = 2
+    let MIN_NUMBER_OF_CARDS = 2
+    let MAX_NUMBER_OF_CARDS = 10
     
     var xPosArrayForTwoRows = [90, 210]
     
-    @IBAction func deleteButtons(_ sender: UIButton) {
-        myButtons.removeAll()
-    }
-    
-    func pickRandomElements(in arr: [EmojiChar], by elementNum: Int) -> [EmojiChar]
+    func pickRandomElements(in arr: [String], by numberOfCards: Int) -> [String]
     {
-        var characters = [EmojiChar]()
-        var arrayHolder = arr
+        var sequenceOfStrings = [String]()
+        var listOfStringsToUse = [String]()
+        var originalListOfStrings = arr //temporarily holds the list
         
-        for _ in 1 ... elementNum
+        let halfOfTheNumberOfCards = numberOfCards / 2
+        
+        for _ in 1 ... halfOfTheNumberOfCards
         {
-            let randomIndex = arc4random_uniform(UInt32(arrayHolder.count))
-            let emoji = arrayHolder.remove(at: Int(randomIndex))
-            characters.append(emoji)
+            let randomIndex = arc4random_uniform(UInt32(originalListOfStrings.count))
+            let emoji = originalListOfStrings.remove(at: Int(randomIndex))
+            listOfStringsToUse.append(emoji)
         }
-        return characters
+        
+        while sequenceOfStrings.count < numberOfCards
+        {
+            let shuffledEmojis = shuffleContents(of: listOfStringsToUse)
+            for emoji in shuffledEmojis
+            {
+                sequenceOfStrings.append(emoji)
+            }
+        }
+        
+        return sequenceOfStrings
     }
     
-    @IBAction func createButtons(_ sender: UIButton)
+    func shuffleContents(of stringList: [String]) -> [String]
     {
-        let emojiArray = pickRandomElements(in: emojiCharacters, by: numberOfCards)
+        var sequencedString = [String]()
+        var stringListHolder = stringList
+        
+        for _ in 1 ... stringList.count
+        {
+            let randomIndexToRemove = arc4random_uniform(UInt32(stringListHolder.count))
+            let stringTaken = stringListHolder.remove(at: Int(randomIndexToRemove))
+            sequencedString.append(stringTaken)
+        }
+        
+        return sequencedString
+    }
+    
+    @IBAction func deleteButtons(_ sender: UIButton) {
+        for c in myCards {
+            c.removeFromSuperview()
+        }
+        
+        numberOfCards += 2
+        if (numberOfCards > 10) {
+            numberOfCards = 10
+        }
+        
+        createCards(by: numberOfCards)
+    }
+    
+    @IBAction func createButtons(_ sender: UIButton){
+        for c in myCards {
+            c.removeFromSuperview()
+        }
+        
+        numberOfCards -= 2
+        if (numberOfCards < 2) {
+            numberOfCards = 2
+        }
+        
+        createCards(by: numberOfCards)
+    }
+    
+    func createCards(by value: Int) {
+        
+        let stringListForCards = pickRandomElements(in: emojiStrings, by: value)
         
         var xPos = 0
         var yPos = 90
         var xIndexer = 0
         
-        for index in 1 ... numberOfCards {
+        for card in stringListForCards {
             
             if (xIndexer > 1) {
                 xIndexer = 0
@@ -94,9 +115,10 @@ class ViewController: UIViewController {
             let myButton = UIButton(frame: CGRect(x: xPos, y: yPos, width: 80, height: 80))
             
             myButton.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-            myButton.setTitle(String(index), for: UIControlState.normal)
+            myButton.setTitle(card, for: UIControlState.normal)
+            myButton.titleLabel?.font = UIFont.systemFont(ofSize: 50)
             self.view.addSubview(myButton)
-            myButtons.append(myButton)
+            myCards.append(myButton)
         }
     }
     
@@ -138,7 +160,7 @@ class ViewController: UIViewController {
     func flip(on button: UIButton)
     {
         let index = button.tag;
-        let cardTitle = cardsWithEmoji[index-1].emoji
+        let cardTitle = emojiStrings[index-1]
         
         if (button.currentTitle == "") {
             button.setTitle(cardTitle, for: UIControlState.normal)
