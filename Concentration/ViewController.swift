@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var emojiStrings = ["🐮","🐶","🦊","🐸","A","B","C","D"]
+    var emojiStrings = ["🐮","🐶","🦊","🐸","🍔","🍟","🍕","🍗"]
     
     var cardsWithEmoji = [String]()
 
