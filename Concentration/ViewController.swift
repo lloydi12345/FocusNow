@@ -128,7 +128,7 @@ class ViewController: UIViewController {
             
             let myButton = UIButton(frame: CGRect(x: xPos, y: yPos, width: 80, height: 80))
             
-            myButton.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            myButton.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
             myButton.setTitle(titleOfCard, for: UIControlState.normal)
             myButton.titleLabel?.font = UIFont.systemFont(ofSize: 50)
             myButton.addTarget(self, action: #selector(pressedButton), for: .touchUpInside)
@@ -150,7 +150,7 @@ class ViewController: UIViewController {
         for card in cards {
             let btn = card.button
             btn.setTitle("", for: UIControlState.normal)
-            btn.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+            btn.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         }
     }
     
@@ -181,13 +181,13 @@ class ViewController: UIViewController {
         {
             print(button.tag)
             button.setTitle(button.currentTitle!, for: UIControlState.normal)
-            button.backgroundColor = #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+            button.backgroundColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
         }
         
         else {
             print(button.tag)
             button.setTitle("", for: UIControlState.normal)
-            button.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+            button.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         }
     }
     
